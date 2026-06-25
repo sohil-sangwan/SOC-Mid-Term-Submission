@@ -1,0 +1,64 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    
+    // Store pairs of {value, original_index}
+    vector<pair<long long, int>> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i].first;
+        a[i].second = i;
+    }
+    
+    // Step 1: Sort the array based on values
+    sort(a.begin(), a.end());
+    
+    // Step 2: Compute prefix sums
+    vector<long long> pref(n);
+    pref[0] = a[0].first;
+    for (int i = 1; i < n; ++i) {
+        pref[i] = pref[i - 1] + a[i].first;
+    }
+    
+    vector<int> ans(n);
+    int j = 0;
+    
+    // Step 3: Determine how far each element can cascade
+    for (int i = 0; i < n; ++i) {
+        // Look ahead as far as possible using our accumulated score
+        if (j < i) {
+            j = i;
+        }
+        while (j < n - 1 && pref[j] >= a[j + 1].first) {
+            j++;
+        }
+        // Total elements reachable from i is 'j', 
+        // but we exclude the starting element itself, so 'j' additional elements.
+        ans[a[i].second] = j;
+    }
+    
+    // Print the answers in the original order
+    for (int i = 0; i < n; ++i) {
+        cout << ans[i] << (i == n - 1 ? "" : " ");
+    }
+    cout << "\n";
+}
+
+int main() {
+    // Optimize standard I/O operations
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    
+    return 0;
+}
