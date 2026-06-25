@@ -1,0 +1,57 @@
+#include <iostream>
+#include <vector>
+#include <map>
+
+using namespace std;
+
+void solve() {
+    int n, k;
+    cin >> n >> k;
+
+    // Maps to store the first and last occurrence of each station
+    map<int, int> first_occ;
+    map<int, int> last_occ;
+
+    for (int i = 0; i < n; ++i) {
+        int station;
+        cin >> station;
+        // If it's the first time seeing this station, record its index
+        if (first_occ.find(station) == first_occ.end()) {
+            first_occ[station] = i;
+        }
+        // Always update the last occurrence to the current index
+        last_occ[station] = i;
+    }
+
+    // Process all queries
+    for (int i = 0; i < k; ++i) {
+        int a, b;
+        cin >> a >> b;
+
+        // Check if both stations exist in the route
+        if (first_occ.find(a) != first_occ.end() && last_occ.find(b) != last_occ.end()) {
+            // Check if the earliest 'a' comes before the latest 'b'
+            if (first_occ[a] < last_occ[b]) {
+                cout << "YES\n";
+            } else {
+                cout << "NO\n";
+            }
+        } else {
+            cout << "NO\n";
+        }
+    }
+}
+
+int main() {
+    // Optimize standard I/O operations for performance
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+
+    return 0;
+}
