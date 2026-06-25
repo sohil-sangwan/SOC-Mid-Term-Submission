@@ -1,0 +1,53 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    string s;
+    cin >> s;
+
+    // Step 1: Find the first position that is already colored
+    int first_colored_idx = -1;
+    for (int i = 0; i < n; i++) {
+        if (s[i] != '?') {
+            first_colored_idx = i;
+            break;
+        }
+    }
+
+    // Case 2: The string is completely empty (all '?')
+    if (first_colored_idx == -1) {
+        s[0] = 'B'; // Arbitrarily pick 'B' for the first slot
+        first_colored_idx = 0;
+    }
+
+    // Step 2: Fill forward from the first colored item to the end
+    for (int i = first_colored_idx + 1; i < n; i++) {
+        if (s[i] == '?') {
+            s[i] = (s[i - 1] == 'R') ? 'B' : 'R';
+        }
+    }
+
+    // Step 3: Fill backward from the first colored item to the start
+    for (int i = first_colored_idx - 1; i >= 0; i--) {
+        if (s[i] == '?') {
+            s[i] = (s[i + 1] == 'R') ? 'B' : 'R';
+        }
+    }
+
+    cout << s << "\n";
+}
+
+int main() {
+    // Fast I/O for competitive programming
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
