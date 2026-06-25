@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    string s;
+    cin >> s;
+
+    int ops = 0;
+    bool found_first_inversion = false;
+
+    for (int i = 0; i < n - 1; i++) {
+        // Look for the first '1' followed by a '0'
+        if (!found_first_inversion && s[i] == '1' && s[i + 1] == '0') {
+            found_first_inversion = true;
+            ops++;
+        } 
+        // Once found, every subsequent transition requires an operation
+        else if (found_first_inversion && s[i] != s[i + 1]) {
+            ops++;
+        }
+    }
+
+    cout << ops << "\n";
+}
+
+int main() {
+    // Fast I/O for competitive programming
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+
