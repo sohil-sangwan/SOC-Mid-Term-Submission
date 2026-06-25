@@ -1,0 +1,48 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int main() {
+    // Optimize standard I/O operations
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int n;
+    long long d;
+    if (!(cin >> n >> d)) return 0;
+
+    vector<long long> p(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> p[i];
+    }
+
+    // Step 1: Sort players by power
+    sort(p.begin(), p.end());
+
+    int left = 0;          // Pointer to the weakest available player
+    int right = n - 1;     // Pointer to the strongest available player
+    int wins = 0;
+
+    // Step 2: Form teams greedily
+    while (left <= right) {
+        long long leader_power = p[right];
+        // Calculate total players needed for this leader to win
+        long long players_needed = (d / leader_power) + 1;
+
+        // The leader is already 1 player, so we need (players_needed - 1) more from the weak side
+        if (right - left + 1 >= players_needed) {
+            wins++;
+            left += (players_needed - 1); // Consume the weakest players
+            right--;                      // Consume the leader
+        } else {
+            // Not enough players left to make another winning team
+            break;
+        }
+    }
+
+    cout << wins << "\n";
+
+    return 0;
+}
