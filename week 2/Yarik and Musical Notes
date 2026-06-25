@@ -1,0 +1,45 @@
+#include <iostream>
+#include <vector>
+#include <map>
+
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    
+    map<int, long long> counts;
+    for (int i = 0; i < n; ++i) {
+        int val;
+        cin >> val;
+        counts[val]++;
+    }
+    
+    long long total_pairs = 0;
+    
+    // Step 1: Count pairs from identical elements
+    for (auto const& [val, count] : counts) {
+        total_pairs += (count * (count - 1)) / 2;
+    }
+    
+    // Step 2: Add special cross-pairs between 1 and 2
+    if (counts.count(1) && counts.count(2)) {
+        total_pairs += counts[1] * counts[2];
+    }
+    
+    cout << total_pairs << "\n";
+}
+
+int main() {
+    // Optimize standard I/O operations
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    
+    return 0;
+}
