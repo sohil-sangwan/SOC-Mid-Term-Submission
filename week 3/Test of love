@@ -1,0 +1,83 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, m, k;
+    cin >> n >> m >> k;
+    string s;
+    cin >> s;
+
+    // Pad the string with 'L' at the start (0) and end (n+1) to represent the banks
+    s = "L" + s + "L"; 
+    
+    int curr = 0; // Start at the left bank
+    bool possible = true;
+
+    while (curr < n + 1) {
+        // 1. If we are on a Log or Bank, we look for our best jump
+        if (s[curr] == 'L') {
+            int next_log = -1;
+            int next_water = -1;
+
+            // Look at all reachable slots within jump range 'm'
+            for (int step = 1; step <= m; step++) {
+                int next_pos = curr + step;
+                if (next_pos > n + 1) break;
+
+                if (s[next_pos] == 'L') {
+                    next_log = next_pos; // Always prioritize the furthest log
+                } else if (s[next_pos] == 'W' && next_water == -1) {
+                    next_water = next_pos; // Track the first valid water jump option
+                }
+            }
+
+            // Jump decision logic
+            if (next_log != -1) {
+                curr = next_log; // Jump to the furthest log
+            } else if (next_water != -1) {
+                // No logs found, we are forced to jump into the water.
+                // To minimize swimming, jump to the maximum possible water distance.
+                int max_water_jump = curr + m;
+                if (max_water_jump <= n + 1 && s[max_water_jump] == 'W') {
+                    curr = max_water_jump;
+                } else {
+                    curr = next_water; // Fallback to the first available water cell
+                }
+            } else {
+                // Every reachable step is a Crocodile or out of range
+                possible = false;
+                break;
+            }
+        } 
+        // 2. If we are in the Water, we must swim forward exactly 1 step
+        else if (s[curr] == 'W') {
+            k--; // Use up 1 meter of swimming stamina
+            if (k < 0) {
+                possible = false;
+                break;
+            }
+            curr++; // Move to the adjacent index
+        } 
+        // 3. If we accidentally land on a Crocodile
+        else {
+            possible = false;
+            break;
+        }
+    }
+
+    if (possible) cout << "YES\n";
+    else cout << "NO\n";
+}
+
+int main() {
+    // Fast I/O for competitive programming
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
