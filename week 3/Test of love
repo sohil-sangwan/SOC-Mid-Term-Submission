@@ -11,6 +11,7 @@ void solve() {
     s = "L" + s + "L"; 
     
     int curr = 0; // Start at the left bank
+
     bool possible = true;
 
     while (curr < n + 1) {
